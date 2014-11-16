@@ -3,9 +3,6 @@ var game = {
   turnCount: "Turn count: ",
   myHP: 3,
   opponentHP: 3,
-  myHand: [],
-  opponentHand: [],
-  gameObjects: [],
 
   getTurnIndicator: function() {
     return this.turnIndicator;

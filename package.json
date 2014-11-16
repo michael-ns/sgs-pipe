@@ -6,6 +6,7 @@
   "author": "Michael Hou",
   "license": "ISC",
   "dependencies": {
+    "cloneextend": "0.0.3",
     "ejs": "^1.0.0",
     "express": "^4.10.2",
     "uniq": "^1.0.1",
