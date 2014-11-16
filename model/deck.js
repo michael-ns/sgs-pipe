@@ -22,7 +22,7 @@ var deck = {
 
 	draw: function() {
 		var card = this.cards[0];
-		this.cards.splice(1, 1);
+		this.cards.splice(0, 1);
 
 		return card;
 	}

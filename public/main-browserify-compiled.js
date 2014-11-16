@@ -1,14 +1,20 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"c:\\pipeline\\model\\card.js":[function(require,module,exports){
-function Card(image, effect, cardType) {
-   this.image = image;
-   this.effect = effect;
-   this.cardType = cardType;
+function Card(image, effect, cardType, id) {
+  this.cardID = id;
+  this.image = image;
+  this.effect = effect;
+  this.cardType = cardType;
 
-   return {
-      image: image,
-      effect: effect,
-      cardType: cardType
-   }
+  function setCardID(id) {
+    this.cardID = id;
+  };
+
+  return {
+    image: image,
+    effect: effect,
+    cardType: cardType,
+    setCardID: setCardID
+  }
 }
 
 module.exports = Card;
@@ -37,7 +43,7 @@ var deck = {
 
 	draw: function() {
 		var card = this.cards[0];
-		this.cards.splice(1, 1);
+		this.cards.splice(0, 1);
 
 		return card;
 	}
@@ -62,6 +68,7 @@ var Card = require('./card')
 var Deck = require('./deck')
 
 var player = {
+	playerName: 'default name',
 	hp: 3,
 	cards: [],
 
@@ -326,24 +333,26 @@ function foreach(object, block, context)
       return value;
  }
  */
-},{}],"c:\\pipeline\\public\\javascripts\\main.js":[function(require,module,exports){
+},{}],"c:\\pipeline\\public\\main.js":[function(require,module,exports){
 var ce = require('cloneextend');
-game = require('./../../model/game');
-Card = require('./../../model/card');
-deck = require('./../../model/deck');
-player = require('./../../model/player');
+game = require('./../model/game');
+Card = require('./../model/card');
+deck = require('./../model/deck');
+player = require('./../model/player');
 
-game = require('./../../model/game');
+game = require('./../model/game');
 
 //creat players
 michael = ce.clone(player);
+michael.playerName = 'Michael';
 michael.hp = 4;
 nancy = ce.clone(player);
+nancy.playerName = 'Nancy';
 
 // get game objects ready
-sha = new Card('sha.jpg', 'sha', 'basic');
-shan = new Card('shan.jpg', 'shan', 'basic');
-tao = new Card('tao.jpg', 'tao', 'basic');
+sha = new Card('sha.jpg', 'sha', 'basic', 0);
+shan = new Card('shan.jpg', 'shan', 'basic', 0);
+tao = new Card('tao.jpg', 'tao', 'basic', 0);
 
 //set cards count
 shaCount = 8;
@@ -352,18 +361,21 @@ taoCount = 3;
 
 //insert cards into the deck
 for(i = 0; i < shaCount; i++) {
+	sha.setCardID(deck.cards.length);
 	deck.cards.push(sha);
 }
 
 for(i = 0; i < shanCount; i++) {
+	sha.setCardID(deck.cards.length);
 	deck.cards.push(shan);
 }
 
 for(i = 0; i < taoCount; i++) {
+	sha.setCardID(deck.cards.length);
 	deck.cards.push(tao);
 }
 
 deck.shuffle();
 
 
-},{"./../../model/card":"c:\\pipeline\\model\\card.js","./../../model/deck":"c:\\pipeline\\model\\deck.js","./../../model/game":"c:\\pipeline\\model\\game.js","./../../model/player":"c:\\pipeline\\model\\player.js","cloneextend":"c:\\pipeline\\node_modules\\cloneextend\\index.js"}]},{},["c:\\pipeline\\public\\javascripts\\main.js"]);
+},{"./../model/card":"c:\\pipeline\\model\\card.js","./../model/deck":"c:\\pipeline\\model\\deck.js","./../model/game":"c:\\pipeline\\model\\game.js","./../model/player":"c:\\pipeline\\model\\player.js","cloneextend":"c:\\pipeline\\node_modules\\cloneextend\\index.js"}]},{},["c:\\pipeline\\public\\main.js"]);

@@ -2,6 +2,7 @@ var Card = require('./card')
 var Deck = require('./deck')
 
 var player = {
+	playerName: 'default name',
 	hp: 3,
 	cards: [],
 

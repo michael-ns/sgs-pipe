@@ -13,7 +13,7 @@
     "watchify": "^2.1.1"
   },
   "scripts": {
-    "watch": "watchify public/javascripts/main.js -o public/javascripts/game-client.js -v",
+    "watch": "watchify public/main.js -o public/main-browserify-compiled.js -v",
     "start": "nodemon app"
   }
 }
