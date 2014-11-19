@@ -1,5 +1,5 @@
-function Card(image, effect, cardType, id) {
-  this.cardID = id;
+function Card(image, effect, cardType) {
+  this.cardID = 1;
   this.image = image;
   this.effect = effect;
   this.cardType = cardType;
@@ -12,6 +12,7 @@ function Card(image, effect, cardType, id) {
     image: image,
     effect: effect,
     cardType: cardType,
+    cardID: this.cardID,
     setCardID: setCardID
   }
 }

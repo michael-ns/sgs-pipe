@@ -10,3 +10,7 @@ a {
 table {
 	 width: 100%;
 }
+
+.confirm-btn {
+	display: none;
+}

@@ -7,6 +7,13 @@ var Game = React.createClass({
     }
   },
 
+  onClickConfirm:function(e){
+    var selectedCardID = $(".selected").attr("id");
+    selectedCardID = parseInt(selectedCardID);
+    this.state.player.playCard(selectedCardID);
+    this.forceUpdate();
+  },
+
   render:function(){
     return (
       <table>
@@ -19,16 +26,27 @@ var Game = React.createClass({
           <td><Deck cards={this.state.deckCards} /></td>
           <PlayerList player={this.state.player} opponent={this.state.opponent} />
         </tr>
+        <tr>
+           <td></td>
+           <td><button className="confirm-btn" onClick={this.onClickConfirm}>Confirm</button></td>
+           <td></td>
+        </tr>
       </table>
       )
   }
 });
 
 var Card = React.createClass({
+  onClickSelect:function(e){
+    $(".card").css("color", "black");
+    $("#" + this.props.id).css("color", "red").addClass("selected");
+    $(".confirm-btn").css("display", "block");
+  },
+
   render:function(){
     return (
       <div>
-        <p>{this.props.name} - ({this.props.type})</p>
+        <p className="card" id={this.props.id} onClick={this.onClickSelect}>{this.props.name} - ({this.props.type})</p>
       </div>
       )
   }
@@ -62,7 +80,7 @@ var Player = React.createClass({
   },
   render:function(){
     var handCards = this.state.person.cards.map(function(card){
-      return <Card name={card.effect} type={card.cardType} />
+      return <Card name={card.effect} type={card.cardType} id={card.cardID} />
     });
 
     return (

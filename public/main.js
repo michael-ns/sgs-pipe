@@ -25,18 +25,21 @@ taoCount = 3;
 
 //insert cards into the deck
 for(i = 0; i < shaCount; i++) {
-	sha.setCardID(deck.cards.length);
-	deck.cards.push(sha);
+	currentSha = ce.clone(sha);
+	currentSha.setCardID(deck.cards.length);
+	deck.cards.push(currentSha);
 }
 
 for(i = 0; i < shanCount; i++) {
-	sha.setCardID(deck.cards.length);
-	deck.cards.push(shan);
+	currentShan = ce.clone(shan);
+	currentShan.setCardID(deck.cards.length);
+	deck.cards.push(currentShan);
 }
 
 for(i = 0; i < taoCount; i++) {
-	sha.setCardID(deck.cards.length);
-	deck.cards.push(tao);
+	currentTao = ce.clone(tao);
+	currentTao.setCardID(deck.cards.length);
+	deck.cards.push(currentTao);
 }
 
 deck.shuffle();

@@ -1,6 +1,6 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"c:\\pipeline\\model\\card.js":[function(require,module,exports){
-function Card(image, effect, cardType, id) {
-  this.cardID = id;
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"c:\\sgs-pipe\\model\\card.js":[function(require,module,exports){
+function Card(image, effect, cardType) {
+  this.cardID = 1;
   this.image = image;
   this.effect = effect;
   this.cardType = cardType;
@@ -13,12 +13,13 @@ function Card(image, effect, cardType, id) {
     image: image,
     effect: effect,
     cardType: cardType,
+    cardID: this.cardID,
     setCardID: setCardID
   }
 }
 
 module.exports = Card;
-},{}],"c:\\pipeline\\model\\deck.js":[function(require,module,exports){
+},{}],"c:\\sgs-pipe\\model\\deck.js":[function(require,module,exports){
 var Card = require('./card')
 
 var deck = {
@@ -50,7 +51,7 @@ var deck = {
 };
 
 module.exports = deck;
-},{"./card":"c:\\pipeline\\model\\card.js"}],"c:\\pipeline\\model\\game.js":[function(require,module,exports){
+},{"./card":"c:\\sgs-pipe\\model\\card.js"}],"c:\\sgs-pipe\\model\\game.js":[function(require,module,exports){
 var game = {
   turnIndicator: "My turn: YES",
   turnCount: "Turn count: ",
@@ -63,26 +64,33 @@ var game = {
 }
 
 module.exports = game;
-},{}],"c:\\pipeline\\model\\player.js":[function(require,module,exports){
+},{}],"c:\\sgs-pipe\\model\\player.js":[function(require,module,exports){
 var Card = require('./card')
 var Deck = require('./deck')
 
 var player = {
-	playerName: 'default name',
-	hp: 3,
-	cards: [],
+  playerName: 'default name',
+  hp: 3,
+  cards: [],
 
-	putInHand: function(card) {
-		this.cards.push(card);
-	},
+  putInHand: function(card) {
+    this.cards.push(card);
+  },
 
-	playCard: function(cardIndex) {
-		this.cards.splice(cardIndex, 1);
-	}
+  playCard: function(cardID) {
+    for (var i = 0; i < this.cards.length; i++) {
+      if (this.cards[i].cardID == cardID) {
+
+        var selectedCard = this.cards[i];
+        this.cards.splice(i, 1);
+        return selectedCard;
+      }
+    }
+  }
 }
 
 module.exports = player;
-},{"./card":"c:\\pipeline\\model\\card.js","./deck":"c:\\pipeline\\model\\deck.js"}],"c:\\pipeline\\node_modules\\cloneextend\\index.js":[function(require,module,exports){
+},{"./card":"c:\\sgs-pipe\\model\\card.js","./deck":"c:\\sgs-pipe\\model\\deck.js"}],"c:\\sgs-pipe\\node_modules\\cloneextend\\index.js":[function(require,module,exports){
 function replace(a, b)
 {
  if (!b)
@@ -333,7 +341,7 @@ function foreach(object, block, context)
       return value;
  }
  */
-},{}],"c:\\pipeline\\public\\main.js":[function(require,module,exports){
+},{}],"c:\\sgs-pipe\\public\\main.js":[function(require,module,exports){
 var ce = require('cloneextend');
 game = require('./../model/game');
 Card = require('./../model/card');
@@ -361,21 +369,24 @@ taoCount = 3;
 
 //insert cards into the deck
 for(i = 0; i < shaCount; i++) {
-	sha.setCardID(deck.cards.length);
-	deck.cards.push(sha);
+	currentSha = ce.clone(sha);
+	currentSha.setCardID(deck.cards.length);
+	deck.cards.push(currentSha);
 }
 
 for(i = 0; i < shanCount; i++) {
-	sha.setCardID(deck.cards.length);
-	deck.cards.push(shan);
+	currentShan = ce.clone(shan);
+	currentShan.setCardID(deck.cards.length);
+	deck.cards.push(currentShan);
 }
 
 for(i = 0; i < taoCount; i++) {
-	sha.setCardID(deck.cards.length);
-	deck.cards.push(tao);
+	currentTao = ce.clone(tao);
+	currentTao.setCardID(deck.cards.length);
+	deck.cards.push(currentTao);
 }
 
 deck.shuffle();
 
 
-},{"./../model/card":"c:\\pipeline\\model\\card.js","./../model/deck":"c:\\pipeline\\model\\deck.js","./../model/game":"c:\\pipeline\\model\\game.js","./../model/player":"c:\\pipeline\\model\\player.js","cloneextend":"c:\\pipeline\\node_modules\\cloneextend\\index.js"}]},{},["c:\\pipeline\\public\\main.js"]);
+},{"./../model/card":"c:\\sgs-pipe\\model\\card.js","./../model/deck":"c:\\sgs-pipe\\model\\deck.js","./../model/game":"c:\\sgs-pipe\\model\\game.js","./../model/player":"c:\\sgs-pipe\\model\\player.js","cloneextend":"c:\\sgs-pipe\\node_modules\\cloneextend\\index.js"}]},{},["c:\\sgs-pipe\\public\\main.js"]);

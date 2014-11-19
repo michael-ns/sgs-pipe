@@ -7,6 +7,13 @@ var Game = React.createClass({displayName: 'Game',
     }
   },
 
+  onClickConfirm:function(e){
+    var selectedCardID = $(".selected").attr("id");
+    selectedCardID = parseInt(selectedCardID);
+    this.state.player.playCard(selectedCardID);
+    this.forceUpdate();
+  },
+
   render:function(){
     return (
       React.createElement("table", null, 
@@ -18,6 +25,11 @@ var Game = React.createClass({displayName: 'Game',
         React.createElement("tr", null, 
           React.createElement("td", null, React.createElement(Deck, {cards: this.state.deckCards})), 
           React.createElement(PlayerList, {player: this.state.player, opponent: this.state.opponent})
+        ), 
+        React.createElement("tr", null, 
+           React.createElement("td", null), 
+           React.createElement("td", null, React.createElement("button", {className: "confirm-btn", onClick: this.onClickConfirm}, "Confirm")), 
+           React.createElement("td", null)
         )
       )
       )
@@ -25,10 +37,16 @@ var Game = React.createClass({displayName: 'Game',
 });
 
 var Card = React.createClass({displayName: 'Card',
+  onClickSelect:function(e){
+    $(".card").css("color", "black");
+    $("#" + this.props.id).css("color", "red").addClass("selected");
+    $(".confirm-btn").css("display", "block");
+  },
+
   render:function(){
     return (
       React.createElement("div", null, 
-        React.createElement("p", null, this.props.name, " - (", this.props.type, ")")
+        React.createElement("p", {className: "card", id: this.props.id, onClick: this.onClickSelect}, this.props.name, " - (", this.props.type, ")")
       )
       )
   }
@@ -62,7 +80,7 @@ var Player = React.createClass({displayName: 'Player',
   },
   render:function(){
     var handCards = this.state.person.cards.map(function(card){
-      return React.createElement(Card, {name: card.effect, type: card.cardType})
+      return React.createElement(Card, {name: card.effect, type: card.cardType, id: card.cardID})
     });
 
     return (
