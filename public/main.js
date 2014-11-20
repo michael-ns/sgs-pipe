@@ -9,7 +9,8 @@ game = require('./../model/game');
 //creat players
 michael = ce.clone(player);
 michael.playerName = 'Michael';
-michael.hp = 4;
+michael.maxHP = 4;
+michael.currentHP = 4;
 nancy = ce.clone(player);
 nancy.playerName = 'Nancy';
 

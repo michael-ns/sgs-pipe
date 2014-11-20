@@ -10,8 +10,20 @@ var Game = React.createClass({displayName: 'Game',
   onClickConfirm:function(e){
     var selectedCardID = $(".selected").attr("id");
     selectedCardID = parseInt(selectedCardID);
-    this.state.player.playCard(selectedCardID);
+
+    var selectedCard = this.props.player.playCard(selectedCardID);
+
+    this.settleCardEffect(selectedCard);
+
+    $(".selected").removeClass("selected").css("color", "black");
+
     this.forceUpdate();
+  },
+
+  settleCardEffect:function(card){
+    if(card.effect == "sha") {
+      this.state.opponent.currentHP -= 1;
+    }
   },
 
   render:function(){
@@ -19,8 +31,8 @@ var Game = React.createClass({displayName: 'Game',
       React.createElement("table", null, 
         React.createElement("tr", null, 
           React.createElement("td", null, React.createElement("h2", null, "Deck")), 
-          React.createElement("td", null, React.createElement("h2", null, "Player")), 
-          React.createElement("td", null, React.createElement("h2", null, "Opponent"))
+          React.createElement("td", null, React.createElement("h2", null, "Player: ", this.state.player.currentHP)), 
+          React.createElement("td", null, React.createElement("h2", null, "Opponent: ", this.state.opponent.currentHP))
         ), 
         React.createElement("tr", null, 
           React.createElement("td", null, React.createElement(Deck, {cards: this.state.deckCards})), 
