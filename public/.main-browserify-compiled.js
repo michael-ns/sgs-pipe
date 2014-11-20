@@ -63,6 +63,15 @@ var game = {
     }
     
     return msg;
+  },
+
+  switchTurn: function() {
+    alert("break point in function");
+    if(this.isMyTurn) {
+      this.isMyTurn = false;
+    }else {
+      this.isMyTurn = true;
+    }
   }
 }
 

@@ -1,11 +1,23 @@
 var game = {
-  turnIndicator: "My turn: YES",
-  turnCount: "Turn count: ",
-  myHP: 3,
-  opponentHP: 3,
+  isMyTurn: true,
 
-  getTurnIndicator: function() {
-    return this.turnIndicator;
+  printTurnIndicator: function() {
+    if(this.isMyTurn) {
+      var msg = "Your turn";
+    }else {
+      var msg = "Opponent's turn";
+    }
+    
+    return msg;
+  },
+
+  switchTurn: function() {
+    alert("break point in function");
+    if(this.isMyTurn) {
+      this.isMyTurn = false;
+    }else {
+      this.isMyTurn = true;
+    }
   }
 }
 

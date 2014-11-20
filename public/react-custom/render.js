@@ -1,6 +1,7 @@
 var Game = React.createClass({
   getInitialState:function(){
     return {
+      game: this.props.game,
       deckCards: this.props.cards,
       player: this.props.player,
       opponent: this.props.opponent
@@ -11,12 +12,19 @@ var Game = React.createClass({
     var selectedCardID = $(".selected").attr("id");
     selectedCardID = parseInt(selectedCardID);
 
-    var selectedCard = this.props.player.playCard(selectedCardID);
+    var selectedCard = this.state.player.playCard(selectedCardID);
 
     this.settleCardEffect(selectedCard);
 
     $(".selected").removeClass("selected").css("color", "black");
 
+    this.forceUpdate();
+  },
+
+  onClickEndTurn:function(e){
+    alert("break point");
+    this.state.game.switchTurn();
+    alert("break point 2");
     this.forceUpdate();
   },
 
@@ -39,9 +47,9 @@ var Game = React.createClass({
           <PlayerList player={this.state.player} opponent={this.state.opponent} />
         </tr>
         <tr>
-           <td></td>
+           <td><h2>{this.state.game.printTurnIndicator()}</h2></td>
            <td><button className="confirm-btn" onClick={this.onClickConfirm}>Confirm</button></td>
-           <td></td>
+           <td><button className="end-turn-btn" onClick={this.onClickEndTurn}>End Turn</button></td>
         </tr>
       </table>
       )
@@ -121,4 +129,4 @@ var PlayerList = React.createClass({
   }
 });
 
-React.renderComponent(<Game cards={deck} player={michael} opponent={nancy} />, document.getElementById('board'))
+React.renderComponent(<Game game={game} cards={deck} player={michael} opponent={nancy} />, document.getElementById('board'))

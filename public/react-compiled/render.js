@@ -1,6 +1,7 @@
 var Game = React.createClass({displayName: 'Game',
   getInitialState:function(){
     return {
+      game: this.props.game,
       deckCards: this.props.cards,
       player: this.props.player,
       opponent: this.props.opponent
@@ -11,12 +12,19 @@ var Game = React.createClass({displayName: 'Game',
     var selectedCardID = $(".selected").attr("id");
     selectedCardID = parseInt(selectedCardID);
 
-    var selectedCard = this.props.player.playCard(selectedCardID);
+    var selectedCard = this.state.player.playCard(selectedCardID);
 
     this.settleCardEffect(selectedCard);
 
     $(".selected").removeClass("selected").css("color", "black");
 
+    this.forceUpdate();
+  },
+
+  onClickEndTurn:function(e){
+    alert("break point");
+    this.state.game.switchTurn();
+    alert("break point 2");
     this.forceUpdate();
   },
 
@@ -39,9 +47,9 @@ var Game = React.createClass({displayName: 'Game',
           React.createElement(PlayerList, {player: this.state.player, opponent: this.state.opponent})
         ), 
         React.createElement("tr", null, 
-           React.createElement("td", null), 
+           React.createElement("td", null, React.createElement("h2", null, this.state.game.printTurnIndicator())), 
            React.createElement("td", null, React.createElement("button", {className: "confirm-btn", onClick: this.onClickConfirm}, "Confirm")), 
-           React.createElement("td", null)
+           React.createElement("td", null, React.createElement("button", {className: "end-turn-btn", onClick: this.onClickEndTurn}, "End Turn"))
         )
       )
       )
@@ -121,4 +129,4 @@ var PlayerList = React.createClass({displayName: 'PlayerList',
   }
 });
 
-React.renderComponent(React.createElement(Game, {cards: deck, player: michael, opponent: nancy}), document.getElementById('board'))
+React.renderComponent(React.createElement(Game, {game: game, cards: deck, player: michael, opponent: nancy}), document.getElementById('board'))
