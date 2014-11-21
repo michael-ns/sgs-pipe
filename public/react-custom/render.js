@@ -1,10 +1,13 @@
+var React = require('react');
+var $ = require('jquery');
+
 var Game = React.createClass({
   getInitialState:function(){
     return {
-      game: this.props.game,
-      deckCards: this.props.cards,
-      player: this.props.player,
-      opponent: this.props.opponent
+      game: game,
+      deckCards: deck,
+      player: michael,
+      opponent: nancy
     }
   },
 
@@ -22,7 +25,7 @@ var Game = React.createClass({
   },
 
   onClickEndTurn:function(e){
-    alert("break point");
+    alert("break point 1");
     this.state.game.switchTurn();
     alert("break point 2");
     this.forceUpdate();
@@ -38,7 +41,7 @@ var Game = React.createClass({
     return (
       <table>
         <tr>
-          <td><h2>Deck</h2></td>
+          <td><h2>Deck s</h2></td>
           <td><h2>Player: {this.state.player.currentHP}</h2></td> 
           <td><h2>Opponent: {this.state.opponent.currentHP}</h2></td>
         </tr>
@@ -129,4 +132,4 @@ var PlayerList = React.createClass({
   }
 });
 
-React.renderComponent(<Game game={game} cards={deck} player={michael} opponent={nancy} />, document.getElementById('board'))
+module.exports = Game;

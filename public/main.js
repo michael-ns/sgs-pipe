@@ -1,10 +1,14 @@
 var ce = require('cloneextend');
+var $ = require('jquery');
+var Game = require('./react-custom/render');
+var React = require('react');
+
 game = require('./../model/game');
 Card = require('./../model/card');
 deck = require('./../model/deck');
 player = require('./../model/player');
-
 game = require('./../model/game');
+
 
 //creat players
 michael = ce.clone(player);
@@ -45,3 +49,12 @@ for(i = 0; i < taoCount; i++) {
 
 deck.shuffle();
 
+var startCardCount = 4;
+
+for (var i=0; i < startCardCount; i++) michael.putInHand(deck.draw());
+for (var i=0; i < startCardCount; i++) nancy.putInHand(deck.draw());
+
+
+React.renderComponent(
+    Game(), document.getElementById('board')
+);
