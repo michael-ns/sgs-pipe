@@ -12,7 +12,7 @@ gulp.task('js', function() {
     cache: {},
     packageCache: {},
     // Specify the entry point of your app
-    entries: ['./public/main.js']
+    entries: ['./public/js/main.js']
   });
 
   var bundle = function() {

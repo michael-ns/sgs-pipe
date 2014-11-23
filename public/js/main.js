@@ -1,13 +1,13 @@
 var ce = require('cloneextend');
 var $ = require('jquery');
-var Game = require('./react-custom/render');
+var GameView = require('./view');
 var React = require('react');
 
-game = require('./../model/game');
-Card = require('./../model/card');
-deck = require('./../model/deck');
-player = require('./../model/player');
-game = require('./../model/game');
+game = require('./../../model/game');
+Card = require('./../../model/card');
+deck = require('./../../model/deck');
+player = require('./../../model/player');
+game = require('./../../model/game');
 
 
 //creat players
@@ -30,21 +30,21 @@ taoCount = 3;
 
 //insert cards into the deck
 for(i = 0; i < shaCount; i++) {
-	currentSha = ce.clone(sha);
-	currentSha.setCardID(deck.cards.length);
-	deck.cards.push(currentSha);
+  currentSha = ce.clone(sha);
+  currentSha.setCardID(deck.cards.length);
+  deck.cards.push(currentSha);
 }
 
 for(i = 0; i < shanCount; i++) {
-	currentShan = ce.clone(shan);
-	currentShan.setCardID(deck.cards.length);
-	deck.cards.push(currentShan);
+  currentShan = ce.clone(shan);
+  currentShan.setCardID(deck.cards.length);
+  deck.cards.push(currentShan);
 }
 
 for(i = 0; i < taoCount; i++) {
-	currentTao = ce.clone(tao);
-	currentTao.setCardID(deck.cards.length);
-	deck.cards.push(currentTao);
+  currentTao = ce.clone(tao);
+  currentTao.setCardID(deck.cards.length);
+  deck.cards.push(currentTao);
 }
 
 deck.shuffle();
@@ -56,5 +56,5 @@ for (var i=0; i < startCardCount; i++) nancy.putInHand(deck.draw());
 
 
 React.renderComponent(
-    Game(), document.getElementById('board')
+    GameView(), document.getElementById('board')
 );
