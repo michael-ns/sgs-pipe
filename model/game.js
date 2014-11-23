@@ -12,7 +12,6 @@ var game = {
   },
 
   switchTurn: function() {
-    alert("break point in function");
     if(this.isMyTurn) {
       this.isMyTurn = false;
     }else {

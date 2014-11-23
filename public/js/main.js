@@ -7,7 +7,6 @@ game = require('./../../model/game');
 Card = require('./../../model/card');
 deck = require('./../../model/deck');
 player = require('./../../model/player');
-game = require('./../../model/game');
 
 
 //creat players

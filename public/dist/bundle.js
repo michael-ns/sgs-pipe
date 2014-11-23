@@ -8,7 +8,6 @@ game = require('./../../model/game');
 Card = require('./../../model/card');
 deck = require('./../../model/deck');
 player = require('./../../model/player');
-game = require('./../../model/game');
 
 
 //creat players
@@ -59,7 +58,7 @@ for (var i=0; i < startCardCount; i++) nancy.putInHand(deck.draw());
 React.renderComponent(
     GameView(), document.getElementById('board')
 );
-},{"./../../model/card":2,"./../../model/deck":3,"./../../model/game":4,"./../../model/player":5,"./view":155,"cloneextend":7,"jquery":8,"react":154}],2:[function(require,module,exports){
+},{"./../../model/card":2,"./../../model/deck":3,"./../../model/game":4,"./../../model/player":5,"./view":156,"cloneextend":7,"jquery":8,"react":154}],2:[function(require,module,exports){
 function Card(image, effect, cardType) {
   this.cardID = 1;
   this.image = image;
@@ -127,7 +126,6 @@ var game = {
   },
 
   switchTurn: function() {
-    alert("break point in function");
     if(this.isMyTurn) {
       this.isMyTurn = false;
     }else {
@@ -27932,7 +27930,42 @@ module.exports = require('./lib/React');
 
 },{"./lib/React":36}],155:[function(require,module,exports){
 var React = require('react');
+
+var GameActions = {
+  onClickConfirm:function(player, opponent){
+    var selectedCardID = $(".selected").attr("id");
+    selectedCardID = parseInt(selectedCardID);
+
+    var selectedCard = player.playCard(selectedCardID);
+
+    this.settleCardEffect(selectedCard, opponent);
+
+    $(".selected").removeClass("selected").css("color", "black");
+  },
+
+  settleCardEffect:function(card, opponent){
+    if(card.effect == "sha") {
+      opponent.currentHP -= 1;
+    }
+  },
+
+  onClickEndTurn:function(game){
+    game.switchTurn();
+  },
+
+  onClickSelect:function(e){
+    $(".card").css("color", "black");
+    $("#" + this.props.id).css("color", "red").addClass("selected");
+    $(".confirm-btn").css("display", "block");
+  }  
+};
+
+module.exports = GameActions;
+},{"react":154}],156:[function(require,module,exports){
+var React = require('react');
 var $ = require('jquery');
+
+var GameActions = require('./actions');
 
 var Game = React.createClass({displayName: 'Game',
   getInitialState:function(){
@@ -27945,29 +27978,13 @@ var Game = React.createClass({displayName: 'Game',
   },
 
   onClickConfirm:function(e){
-    var selectedCardID = $(".selected").attr("id");
-    selectedCardID = parseInt(selectedCardID);
-
-    var selectedCard = this.state.player.playCard(selectedCardID);
-
-    this.settleCardEffect(selectedCard);
-
-    $(".selected").removeClass("selected").css("color", "black");
-
+    GameActions.onClickConfirm(this.state.player, this.state.opponent);
     this.forceUpdate();
   },
 
   onClickEndTurn:function(e){
-    alert("break point 1");
-    this.state.game.switchTurn();
-    alert("break point 2");
+    GameActions.onClickEndTurn(this.state.game);
     this.forceUpdate();
-  },
-
-  settleCardEffect:function(card){
-    if(card.effect == "sha") {
-      this.state.opponent.currentHP -= 1;
-    }
   },
 
   render:function(){
@@ -28066,4 +28083,4 @@ var PlayerList = React.createClass({displayName: 'PlayerList',
 });
 
 module.exports = Game;
-},{"jquery":8,"react":154}]},{},[1]);
+},{"./actions":155,"jquery":8,"react":154}]},{},[1]);

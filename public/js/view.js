@@ -1,6 +1,8 @@
 var React = require('react');
 var $ = require('jquery');
 
+var GameActions = require('./actions');
+
 var Game = React.createClass({
   getInitialState:function(){
     return {
@@ -12,29 +14,13 @@ var Game = React.createClass({
   },
 
   onClickConfirm:function(e){
-    var selectedCardID = $(".selected").attr("id");
-    selectedCardID = parseInt(selectedCardID);
-
-    var selectedCard = this.state.player.playCard(selectedCardID);
-
-    this.settleCardEffect(selectedCard);
-
-    $(".selected").removeClass("selected").css("color", "black");
-
+    GameActions.onClickConfirm(this.state.player, this.state.opponent);
     this.forceUpdate();
   },
 
   onClickEndTurn:function(e){
-    alert("break point 1");
-    this.state.game.switchTurn();
-    alert("break point 2");
+    GameActions.onClickEndTurn(this.state.game);
     this.forceUpdate();
-  },
-
-  settleCardEffect:function(card){
-    if(card.effect == "sha") {
-      this.state.opponent.currentHP -= 1;
-    }
   },
 
   render:function(){
@@ -61,9 +47,7 @@ var Game = React.createClass({
 
 var Card = React.createClass({
   onClickSelect:function(e){
-    $(".card").css("color", "black");
-    $("#" + this.props.id).css("color", "red").addClass("selected");
-    $(".confirm-btn").css("display", "block");
+    GameActions.onClickSelect(this.props.id);
   },
 
   render:function(){
