@@ -10,16 +10,7 @@ Card = require('./../../model/card');
 deck = require('./../../model/deck');
 player = require('./../../model/player');
 
-
-//creat players
-michael = ce.clone(player);
-michael.playerName = 'Michael';
-michael.maxHP = 4;
-michael.currentHP = 4;
-nancy = ce.clone(player);
-nancy.playerName = 'Nancy';
-
-// get game objects ready
+//setup deck
 sha = new Card('sha.jpg', 'sha', 'basic', 0);
 shan = new Card('shan.jpg', 'shan', 'basic', 0);
 tao = new Card('tao.jpg', 'tao', 'basic', 0);
@@ -50,13 +41,16 @@ for(i = 0; i < taoCount; i++) {
 
 deck.shuffle();
 
-var startCardCount = 4;
-
-for (var i=0; i < startCardCount; i++) michael.putInHand(deck.draw());
-for (var i=0; i < startCardCount; i++) nancy.putInHand(deck.draw());
-
-//insert all states into store
 GameStore.setDeck(deck);
+
+//setup player
+michael = ce.clone(player);
+michael.playerName = 'Michael';
+michael.maxHP = 4;
+michael.currentHP = 4;
+nancy = ce.clone(player);
+nancy.playerName = 'Nancy';
+
 GameStore.setPlayer(michael);
 GameStore.setOpponent(nancy);
 
@@ -28655,9 +28649,15 @@ var GameActions = {
     });
   },
 
+  onClickStartGame: function() {
+    GameDispatcher.handleViewAction({
+      actionType: GameConstants.ONCLICK_START_GAME
+    });
+  },
+
   onClickConfirm: function() {
     GameDispatcher.handleViewAction({
-      actionType: GameConstants.ONCLICK_CONFIRM,
+      actionType: GameConstants.ONCLICK_CONFIRM
     });
   }
 };
@@ -28669,7 +28669,8 @@ var keyMirror = require('keymirror');
 
 module.exports = keyMirror({
   CARD_SELECT: null,
-  ONCLICK_CONFIRM: null
+  ONCLICK_CONFIRM: null,
+  ONCLICK_START_GAME: null
 });
 
 },{"keymirror":13}],163:[function(require,module,exports){
@@ -28715,6 +28716,7 @@ var CHANGE_EVENT = 'change';
 var _deck = null;
 var _player = null;
 var _opponent = null;
+var _startingHandCount = 4;
 
 /**
  * Handle player clicking a card
@@ -28723,6 +28725,12 @@ function cardSelect(cardID) {
   $(".card").css("color", "black");
   $("#" + cardID).css("color", "red").addClass("selected");
   $(".confirm-btn").css("display", "block");
+}
+
+function onClickStartGame() {
+  $(".game-start-btn").css("display", "none");
+  for (var i=0; i < _startingHandCount; i++) _player.putInHand(deck.draw());
+  for (var i=0; i < _startingHandCount; i++) _opponent.putInHand(deck.draw());
 }
 
 function onClickConfirm() {
@@ -28804,6 +28812,10 @@ GameDispatcher.register(function(payload) {
       onClickConfirm();
       break;
 
+    case GameConstants.ONCLICK_START_GAME:
+      onClickStartGame();
+      break;
+
     default:
       return true;
   }
@@ -28838,6 +28850,11 @@ var Game = React.createClass({displayName: 'Game',
     return getGameState();
   },
 
+  onClickStartGame:function(e){
+    GameActions.onClickStartGame();
+    this.forceUpdate();
+  },
+
   onClickConfirm:function(e){
     GameActions.onClickConfirm();
     this.forceUpdate();
@@ -28865,6 +28882,9 @@ var Game = React.createClass({displayName: 'Game',
            React.createElement("td", null, React.createElement("h2", null, "Fake Turn Indicator")), 
            React.createElement("td", null, React.createElement("button", {className: "confirm-btn", onClick: this.onClickConfirm}, "Confirm")), 
            React.createElement("td", null, React.createElement("button", {className: "end-turn-btn", onClick: this.onClickEndTurn}, "End Turn"))
+        ), 
+        React.createElement("tr", null, 
+           React.createElement("td", null, React.createElement("button", {className: "game-start-btn", onClick: this.onClickStartGame}, "Start"))
         )
       )
       )

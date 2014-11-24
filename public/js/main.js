@@ -9,16 +9,7 @@ Card = require('./../../model/card');
 deck = require('./../../model/deck');
 player = require('./../../model/player');
 
-
-//creat players
-michael = ce.clone(player);
-michael.playerName = 'Michael';
-michael.maxHP = 4;
-michael.currentHP = 4;
-nancy = ce.clone(player);
-nancy.playerName = 'Nancy';
-
-// get game objects ready
+//setup deck
 sha = new Card('sha.jpg', 'sha', 'basic', 0);
 shan = new Card('shan.jpg', 'shan', 'basic', 0);
 tao = new Card('tao.jpg', 'tao', 'basic', 0);
@@ -49,13 +40,16 @@ for(i = 0; i < taoCount; i++) {
 
 deck.shuffle();
 
-var startCardCount = 4;
-
-for (var i=0; i < startCardCount; i++) michael.putInHand(deck.draw());
-for (var i=0; i < startCardCount; i++) nancy.putInHand(deck.draw());
-
-//insert all states into store
 GameStore.setDeck(deck);
+
+//setup player
+michael = ce.clone(player);
+michael.playerName = 'Michael';
+michael.maxHP = 4;
+michael.currentHP = 4;
+nancy = ce.clone(player);
+nancy.playerName = 'Nancy';
+
 GameStore.setPlayer(michael);
 GameStore.setOpponent(nancy);
 

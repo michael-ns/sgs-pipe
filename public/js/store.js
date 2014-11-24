@@ -13,6 +13,7 @@ var CHANGE_EVENT = 'change';
 var _deck = null;
 var _player = null;
 var _opponent = null;
+var _startingHandCount = 4;
 
 /**
  * Handle player clicking a card
@@ -23,14 +24,17 @@ function cardSelect(cardID) {
   $(".confirm-btn").css("display", "block");
 }
 
+function onClickStartGame() {
+  $(".game-start-btn").css("display", "none");
+  for (var i=0; i < _startingHandCount; i++) _player.putInHand(deck.draw());
+  for (var i=0; i < _startingHandCount; i++) _opponent.putInHand(deck.draw());
+}
+
 function onClickConfirm() {
   var selectedCardID = $(".selected").attr("id");
   selectedCardID = parseInt(selectedCardID);
 
-  console.log(selectedCardID)
-  console.log(_player.cards)
   var selectedCard = _player.playCard(selectedCardID);
-  console.log(_player.cards)
 
   settleCardEffect(selectedCard);
 
@@ -39,9 +43,7 @@ function onClickConfirm() {
 
 function settleCardEffect(card) {
   if(card.effect == "sha") {
-    console.log(_opponent.currentHP)
     _opponent.currentHP -= 1;
-    console.log(_opponent.currentHP)
   }
 }
 
@@ -100,6 +102,10 @@ GameDispatcher.register(function(payload) {
 
     case GameConstants.ONCLICK_CONFIRM:
       onClickConfirm();
+      break;
+
+    case GameConstants.ONCLICK_START_GAME:
+      onClickStartGame();
       break;
 
     default:

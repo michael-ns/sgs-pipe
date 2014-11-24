@@ -13,9 +13,15 @@ var GameActions = {
     });
   },
 
+  onClickStartGame: function() {
+    GameDispatcher.handleViewAction({
+      actionType: GameConstants.ONCLICK_START_GAME
+    });
+  },
+
   onClickConfirm: function() {
     GameDispatcher.handleViewAction({
-      actionType: GameConstants.ONCLICK_CONFIRM,
+      actionType: GameConstants.ONCLICK_CONFIRM
     });
   }
 };
