@@ -62,17 +62,24 @@ function Card(image, effect, cardType) {
   this.image = image;
   this.effect = effect;
   this.cardType = cardType;
+  this.visible = false;
 
   function setCardID(id) {
     this.cardID = id;
+  };
+
+  function setVisibility(isVisible) {
+    this.visible = isVisible;
   };
 
   return {
     image: image,
     effect: effect,
     cardType: cardType,
+    visible: this.visible,
     cardID: this.cardID,
-    setCardID: setCardID
+    setCardID: setCardID,
+    setVisibility: setVisibility
   }
 }
 
@@ -120,8 +127,12 @@ var player = {
   cards: [],
   canSha: true,
 
-  putInHand: function(card) {
+  putInHand: function(card, isVisible) {
+    card.setVisibility(isVisible);
     this.cards.push(card);
+
+
+      console.log(card.visible)
   },
 
   playCard: function(cardID) {
@@ -28705,8 +28716,9 @@ function cardSelect(cardID) {
 
 function onClickStartGame() {
   $(".game-start-btn").css("display", "none");
-  for (var i=0; i < _startingHandCount; i++) _player.putInHand(deck.draw());
-  for (var i=0; i < _startingHandCount; i++) _opponent.putInHand(deck.draw());
+  //second argument for putInHand represents card visibility
+  for (var i=0; i < _startingHandCount; i++) _player.putInHand(deck.draw(), true);
+  for (var i=0; i < _startingHandCount; i++) _opponent.putInHand(deck.draw(), false);
 }
 
 function onClickConfirm() {
@@ -28836,7 +28848,7 @@ var Game = React.createClass({displayName: 'Game',
     this.updateTurnIndicator();
   },
 
-  printTurnIndicator:function(){
+  updateTurnIndicator:function(){
     var msg = this.state.allGameStates.isMyTurn
       ? "Your turn"
       : "Opponent's turn"
@@ -28876,9 +28888,14 @@ var Card = React.createClass({displayName: 'Card',
   },
 
   render:function(){
+    var card = this.props.isVisible
+      ? React.createElement("p", {className: "card", id: this.props.id, onClick: this.onClickSelect}, this.props.name)
+      : React.createElement("p", {className: "card"}, "XXX")
+      ;
+
     return (
       React.createElement("div", null, 
-        React.createElement("p", {className: "card", id: this.props.id, onClick: this.onClickSelect}, this.props.name)
+        card
       )
       )
   }
@@ -28893,7 +28910,7 @@ var Deck = React.createClass({displayName: 'Deck',
 
   render:function(){
     var deck = this.state.deckCards.cards.map(function(card){
-      return React.createElement(Card, {name: card.effect, type: card.cardType, cardID: card.cardID})
+      return React.createElement(Card, {name: card.effect, isVisible: card.visible, cardID: card.cardID})
     });
 
     return (
@@ -28912,7 +28929,7 @@ var Player = React.createClass({displayName: 'Player',
   },
   render:function(){
     var handCards = this.state.person.cards.map(function(card){
-      return React.createElement(Card, {name: card.effect, type: card.cardType, id: card.cardID})
+      return React.createElement(Card, {name: card.effect, isVisible: card.visible, cardID: card.cardID})
     });
 
     return (

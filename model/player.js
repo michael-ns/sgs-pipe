@@ -8,8 +8,12 @@ var player = {
   cards: [],
   canSha: true,
 
-  putInHand: function(card) {
+  putInHand: function(card, isVisible) {
+    card.setVisibility(isVisible);
     this.cards.push(card);
+
+
+      console.log(card.visible)
   },
 
   playCard: function(cardID) {

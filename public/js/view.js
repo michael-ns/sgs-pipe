@@ -70,9 +70,14 @@ var Card = React.createClass({
   },
 
   render:function(){
+    var card = this.props.isVisible
+      ? <p className="card" id={this.props.id} onClick={this.onClickSelect}>{this.props.name}</p>
+      : <p className="card">XXX</p>
+      ;
+
     return (
       <div>
-        <p className="card" id={this.props.id} onClick={this.onClickSelect}>{this.props.name}</p>
+        {card}
       </div>
       )
   }
@@ -87,7 +92,7 @@ var Deck = React.createClass({
 
   render:function(){
     var deck = this.state.deckCards.cards.map(function(card){
-      return <Card name={card.effect} type={card.cardType} cardID={card.cardID} />
+      return <Card name={card.effect} isVisible={card.visible} cardID={card.cardID} />
     });
 
     return (
@@ -106,7 +111,7 @@ var Player = React.createClass({
   },
   render:function(){
     var handCards = this.state.person.cards.map(function(card){
-      return <Card name={card.effect} type={card.cardType} id={card.cardID} />
+      return <Card name={card.effect} isVisible={card.visible} cardID={card.cardID} />
     });
 
     return (

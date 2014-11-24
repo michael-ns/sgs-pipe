@@ -27,8 +27,9 @@ function cardSelect(cardID) {
 
 function onClickStartGame() {
   $(".game-start-btn").css("display", "none");
-  for (var i=0; i < _startingHandCount; i++) _player.putInHand(deck.draw());
-  for (var i=0; i < _startingHandCount; i++) _opponent.putInHand(deck.draw());
+  //second argument for putInHand represents card visibility
+  for (var i=0; i < _startingHandCount; i++) _player.putInHand(deck.draw(), true);
+  for (var i=0; i < _startingHandCount; i++) _opponent.putInHand(deck.draw(), false);
 }
 
 function onClickConfirm() {
