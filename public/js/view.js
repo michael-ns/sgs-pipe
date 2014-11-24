@@ -1,20 +1,23 @@
 var React = require('react');
+var ReactPropTypes = React.PropTypes;
 var $ = require('jquery');
-
 var GameActions = require('./actions');
+var GameStore = require('./store');
+
+function getGameState() {
+  //console.log(GameStore.getAll().player.currentHP)
+  return{
+    allGameStates: GameStore.getAll()
+  }
+}
 
 var Game = React.createClass({
   getInitialState:function(){
-    return {
-      game: game,
-      deckCards: deck,
-      player: michael,
-      opponent: nancy
-    }
+    return getGameState();
   },
 
   onClickConfirm:function(e){
-    GameActions.onClickConfirm(this.state.player, this.state.opponent);
+    GameActions.onClickConfirm();
     this.forceUpdate();
   },
 
@@ -24,19 +27,20 @@ var Game = React.createClass({
   },
 
   render:function(){
+    console.log(this.state.allGameStates.player.currentHP)
     return (
       <table>
         <tr>
-          <td><h2>Deck s</h2></td>
-          <td><h2>Player: {this.state.player.currentHP}</h2></td> 
-          <td><h2>Opponent: {this.state.opponent.currentHP}</h2></td>
+          <td><h2>Deck</h2></td>
+          <td><h2>Player: {this.state.allGameStates.player.currentHP}</h2></td> 
+          <td><h2>Opponent: {this.state.allGameStates.opponent.currentHP}</h2></td>
         </tr>
         <tr>
-          <td><Deck cards={this.state.deckCards} /></td>
-          <PlayerList player={this.state.player} opponent={this.state.opponent} />
+          <td><Deck cards={this.state.allGameStates.deck} /></td>
+          <PlayerList player={this.state.allGameStates.player} opponent={this.state.allGameStates.opponent} />
         </tr>
         <tr>
-           <td><h2>{this.state.game.printTurnIndicator()}</h2></td>
+           <td><h2>Fake Turn Indicator</h2></td>
            <td><button className="confirm-btn" onClick={this.onClickConfirm}>Confirm</button></td>
            <td><button className="end-turn-btn" onClick={this.onClickEndTurn}>End Turn</button></td>
         </tr>

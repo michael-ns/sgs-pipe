@@ -17,12 +17,13 @@ var player = {
       if (this.cards[i].cardID == cardID) {
 
         var selectedCard = this.cards[i];
+        console.log(selectedCard)
         if(this.settleCardEffect(selectedCard)) {
           //remove the card from hand
           this.cards.splice(i, 1);
+        }
 
-          return selectedCard;
-        }        
+        return selectedCard;
       }
     }
   },

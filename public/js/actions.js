@@ -1,32 +1,23 @@
-var React = require('react');
+var GameDispatcher = require('./dispatcher');
+var GameConstants = require('./constants');
 
 var GameActions = {
-  onClickConfirm:function(player, opponent){
-    var selectedCardID = $(".selected").attr("id");
-    selectedCardID = parseInt(selectedCardID);
 
-    var selectedCard = player.playCard(selectedCardID);
-
-    this.settleCardEffect(selectedCard, opponent);
-
-    $(".selected").removeClass("selected").css("color", "black");
+  /**
+  * Handle select when player clicks on a card
+  */
+  onClickSelect: function(cardID) {
+    GameDispatcher.handleViewAction({
+      actionType: GameConstants.CARD_SELECT,
+      id: cardID
+    });
   },
 
-  settleCardEffect:function(card, opponent){
-    if(card.effect == "sha") {
-      opponent.currentHP -= 1;
-    }
-  },
-
-  onClickEndTurn:function(game){
-    game.switchTurn();
-  },
-
-  onClickSelect:function(cardID){
-    $(".card").css("color", "black");
-    $("#" + cardID).css("color", "red").addClass("selected");
-    $(".confirm-btn").css("display", "block");
-  }  
+  onClickConfirm: function() {
+    GameDispatcher.handleViewAction({
+      actionType: GameConstants.ONCLICK_CONFIRM,
+    });
+  }
 };
 
 module.exports = GameActions;

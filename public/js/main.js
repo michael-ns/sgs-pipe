@@ -2,6 +2,7 @@ var ce = require('cloneextend');
 var $ = require('jquery');
 var GameView = require('./view');
 var React = require('react');
+var GameStore = require('./store');
 
 game = require('./../../model/game');
 Card = require('./../../model/card');
@@ -53,6 +54,10 @@ var startCardCount = 4;
 for (var i=0; i < startCardCount; i++) michael.putInHand(deck.draw());
 for (var i=0; i < startCardCount; i++) nancy.putInHand(deck.draw());
 
+//insert all states into store
+GameStore.setDeck(deck);
+GameStore.setPlayer(michael);
+GameStore.setOpponent(nancy);
 
 React.renderComponent(
     GameView(), document.getElementById('board')

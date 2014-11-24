@@ -24,7 +24,9 @@
     "uniq": "*",
     "vinyl-buffer": "*",
     "vinyl-source-stream": "*",
-    "watchify": "*"
+    "watchify": "*",
+    "keymirror": "*",
+    "object-assign": "*"
   },
   "scripts": {
     "watch": "watchify public/main.js -o public/main-browserify-compiled.js -v",
