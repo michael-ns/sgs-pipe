@@ -28910,7 +28910,7 @@ var Deck = React.createClass({displayName: 'Deck',
 
   render:function(){
     var deck = this.state.deckCards.cards.map(function(card){
-      return React.createElement(Card, {name: card.effect, isVisible: card.visible, cardID: card.cardID})
+      return React.createElement(Card, {name: card.effect, id: card.cardID, isVisible: card.visible, cardID: card.cardID})
     });
 
     return (
@@ -28929,7 +28929,7 @@ var Player = React.createClass({displayName: 'Player',
   },
   render:function(){
     var handCards = this.state.person.cards.map(function(card){
-      return React.createElement(Card, {name: card.effect, isVisible: card.visible, cardID: card.cardID})
+      return React.createElement(Card, {name: card.effect, id: card.cardID, isVisible: card.visible, cardID: card.cardID})
     });
 
     return (
