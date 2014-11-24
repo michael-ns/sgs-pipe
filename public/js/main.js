@@ -4,7 +4,6 @@ var GameView = require('./view');
 var React = require('react');
 var GameStore = require('./store');
 
-game = require('./../../model/game');
 Card = require('./../../model/card');
 deck = require('./../../model/deck');
 player = require('./../../model/player');

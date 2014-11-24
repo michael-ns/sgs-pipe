@@ -14,6 +14,7 @@ var _deck = null;
 var _player = null;
 var _opponent = null;
 var _startingHandCount = 4;
+var _isMyTurn = true;
 
 /**
  * Handle player clicking a card
@@ -53,7 +54,8 @@ var GameStore = assign({}, EventEmitter.prototype, {
     return {
       deck: _deck,
       player: _player,
-      opponent: _opponent
+      opponent: _opponent,
+      isMyTurn: _isMyTurn
     };
   },
 

@@ -26,8 +26,17 @@ var Game = React.createClass({
   },
 
   onClickEndTurn:function(e){
-    GameActions.onClickEndTurn(this.state.game);
-    this.forceUpdate();
+    this.state.allGameStates.isMyTurn = !this.state.allGameStates.isMyTurn
+    this.updateTurnIndicator();
+  },
+
+  updateTurnIndicator:function(){
+    var msg = this.state.allGameStates.isMyTurn
+      ? "Your turn"
+      : "Opponent's turn"
+    ;
+
+    $('.turn-indicator').text(msg);
   },
 
   render:function(){
@@ -43,7 +52,7 @@ var Game = React.createClass({
           <PlayerList player={this.state.allGameStates.player} opponent={this.state.allGameStates.opponent} />
         </tr>
         <tr>
-           <td><h2>Fake Turn Indicator</h2></td>
+           <td><h2 className="turn-indicator">Your Turn</h2></td>
            <td><button className="confirm-btn" onClick={this.onClickConfirm}>Confirm</button></td>
            <td><button className="end-turn-btn" onClick={this.onClickEndTurn}>End Turn</button></td>
         </tr>
@@ -63,7 +72,7 @@ var Card = React.createClass({
   render:function(){
     return (
       <div>
-        <p className="card" id={this.props.id} onClick={this.onClickSelect}>{this.props.name} - ({this.props.type})</p>
+        <p className="card" id={this.props.id} onClick={this.onClickSelect}>{this.props.name}</p>
       </div>
       )
   }
