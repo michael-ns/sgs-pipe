@@ -133,47 +133,6 @@ var player = {
 
 
       console.log(card.visible)
-  },
-
-  playCard: function(cardID) {
-    for (var i = 0; i < this.cards.length; i++) {
-      if (this.cards[i].cardID == cardID) {
-
-        var selectedCard = this.cards[i];
-        console.log(selectedCard)
-        if(this.settleCardEffect(selectedCard)) {
-          //remove the card from hand
-          this.cards.splice(i, 1);
-        }
-
-        return selectedCard;
-      }
-    }
-  },
-
-  settleCardEffect: function(card) {
-    var cardEffect = card.effect;
-
-    switch(cardEffect) {
-      case "sha":
-        if(this.canSha) {
-          this.canSha = false;
-          return true;
-        } else {
-          alert("You can only use Sha once per turn.");
-          return false;
-        }
-      case "shan":
-        return false;
-      default:
-        if (this.currentHP < this.maxHP) {
-          this.currentHP += 1;
-          return true;
-        } else {
-          alert("You can only use Tao when you are hurt.");
-          return false;
-        }
-    }
   }
 }
 
@@ -28710,8 +28669,12 @@ var _isMyTurn = true;
  */
 function cardSelect(cardID) {
   $(".card").css("color", "black");
-  $("#" + cardID).css("color", "red").addClass("selected");
+  $("#" + cardID).addClass("selected");
   $(".confirm-btn").css("display", "block");
+}
+
+function addLogMsg(msg){
+  $('.log-msg').append("<div>" + msg + "</div>");
 }
 
 function onClickStartGame() {
@@ -28719,17 +28682,37 @@ function onClickStartGame() {
   //second argument for putInHand represents card visibility
   for (var i=0; i < _startingHandCount; i++) _player.putInHand(deck.draw(), true);
   for (var i=0; i < _startingHandCount; i++) _opponent.putInHand(deck.draw(), false);
+
+  addLogMsg("Game started. Let's rock!");
 }
 
 function onClickConfirm() {
   var selectedCardID = $(".selected").attr("id");
   selectedCardID = parseInt(selectedCardID);
 
-  var selectedCard = _player.playCard(selectedCardID);
+  playCard(selectedCardID);
 
-  settleCardEffect(selectedCard);
-
+  //reset select state on page
   $(".selected").removeClass("selected").css("color", "black");
+}
+
+function playCard(cardID) {
+  for (var i = 0; i < _player.cards.length; i++) {
+    if (_player.cards[i].cardID == cardID) {
+
+      var selectedCard = _player.cards[i];
+      
+      if(canPlayCard(selectedCard)) {
+        //remove the card from hand
+        _player.cards.splice(i, 1);
+        settleCardEffect(selectedCard);
+
+        //log card playing action
+        var cardName = $('.selected').data('card');
+        addLogMsg("You played card: " + cardName);
+      }        
+    }
+  }
 }
 
 function settleCardEffect(card) {
@@ -28737,6 +28720,31 @@ function settleCardEffect(card) {
     _opponent.currentHP -= 1;
   }
 }
+
+function canPlayCard(card) {
+  switch(card.effect) {
+    case "sha":
+      if(_player.canSha) {
+        _player.canSha = false;
+        return true;
+      } else {
+        alert("You can only use Sha once per turn.");
+        return false;
+      }
+
+    case "shan":
+      return false;
+
+    default:
+      if (_player.currentHP < _player.maxHP) {
+        _player.currentHP += 1;
+        return true;
+      } else {
+        alert("You can only use Tao when you are hurt.");
+        return false;
+      }
+    }
+  }
 
 var GameStore = assign({}, EventEmitter.prototype, {
 
@@ -28859,24 +28867,22 @@ var Game = React.createClass({displayName: 'Game',
 
   render:function(){
     return (
-      React.createElement("table", null, 
-        React.createElement("tr", null, 
-          React.createElement("td", null, React.createElement("h2", null, "Deck")), 
-          React.createElement("td", null, React.createElement("h2", null, "Player: ", this.state.allGameStates.player.currentHP)), 
-          React.createElement("td", null, React.createElement("h2", null, "Opponent: ", this.state.allGameStates.opponent.currentHP))
+      React.createElement("div", {id: "board-inner"}, 
+
+        React.createElement("div", {className: "log col-md-3"}, 
+          React.createElement("div", null, "Game Log"), 
+          React.createElement("div", {className: "log-msg"})
         ), 
-        React.createElement("tr", null, 
-          React.createElement("td", null, React.createElement(Deck, {cards: this.state.allGameStates.deck})), 
-          React.createElement(PlayerList, {player: this.state.allGameStates.player, opponent: this.state.allGameStates.opponent})
-        ), 
-        React.createElement("tr", null, 
-           React.createElement("td", null, React.createElement("h2", {className: "turn-indicator"}, "Your Turn")), 
-           React.createElement("td", null, React.createElement("button", {className: "confirm-btn", onClick: this.onClickConfirm}, "Confirm")), 
-           React.createElement("td", null, React.createElement("button", {className: "end-turn-btn", onClick: this.onClickEndTurn}, "End Turn"))
-        ), 
-        React.createElement("tr", null, 
-           React.createElement("td", null, React.createElement("button", {className: "game-start-btn", onClick: this.onClickStartGame}, "Start"))
+
+        React.createElement("div", {className: "game-area col-md-9"}, 
+          React.createElement("div", {className: "opponent-state row"}, "Opponent: ", this.state.allGameStates.opponent.currentHP), 
+          React.createElement("div", {className: "opponent-cards row"}, React.createElement(Player, {person: this.state.allGameStates.opponent})), 
+          React.createElement("div", {className: "battle-field row"}, React.createElement("button", {className: "game-start-btn", onClick: this.onClickStartGame}, "Start")), 
+          React.createElement("div", {className: "player-cards row"}, React.createElement(Player, {person: this.state.allGameStates.player})), 
+          React.createElement("div", {className: "player-state row"}, "Player: ", this.state.allGameStates.player.currentHP), 
+          React.createElement("div", {className: "row"}, React.createElement("button", {className: "confirm-btn", onClick: this.onClickConfirm}, "Confirm"))
         )
+
       )
       )
   }
@@ -28888,13 +28894,15 @@ var Card = React.createClass({displayName: 'Card',
   },
 
   render:function(){
-    var card = this.props.isVisible
-      ? React.createElement("p", {className: "card", id: this.props.id, onClick: this.onClickSelect}, this.props.name)
-      : React.createElement("p", {className: "card"}, "XXX")
-      ;
+
+    var card = React.createElement("img", {className: "card", src: 'img/back.jpg', height: "140", width: "100"});
+
+    if (this.props.isVisible) {
+      card = React.createElement("img", {className: "card visible", id: this.props.id, 'data-card': this.props.name, onClick: this.onClickSelect, src: 'img/' + this.props.name + '.jpg', height: "140", width: "100"});
+    }
 
     return (
-      React.createElement("div", null, 
+      React.createElement("div", {className: "col-md-2"}, 
         card
       )
       )
@@ -28933,26 +28941,8 @@ var Player = React.createClass({displayName: 'Player',
     });
 
     return (
-      React.createElement("td", null, 
-        handCards
-      )
-      )
-  }
-});
-
-var PlayerList = React.createClass({displayName: 'PlayerList',
-  getInitialState:function(){
-    return {
-      player: this.props.player,
-      opponent: this.props.opponent
-    }
-  },
-
-  render:function(){
-    return (
       React.createElement("div", null, 
-        React.createElement(Player, {person: this.state.player}), 
-        React.createElement(Player, {person: this.state.opponent})
+        handCards
       )
       )
   }

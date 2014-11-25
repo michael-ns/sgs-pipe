@@ -41,25 +41,23 @@ var Game = React.createClass({
 
   render:function(){
     return (
-      <table>
-        <tr>
-          <td><h2>Deck</h2></td>
-          <td><h2>Player: {this.state.allGameStates.player.currentHP}</h2></td> 
-          <td><h2>Opponent: {this.state.allGameStates.opponent.currentHP}</h2></td>
-        </tr>
-        <tr>
-          <td><Deck cards={this.state.allGameStates.deck} /></td>
-          <PlayerList player={this.state.allGameStates.player} opponent={this.state.allGameStates.opponent} />
-        </tr>
-        <tr>
-           <td><h2 className="turn-indicator">Your Turn</h2></td>
-           <td><button className="confirm-btn" onClick={this.onClickConfirm}>Confirm</button></td>
-           <td><button className="end-turn-btn" onClick={this.onClickEndTurn}>End Turn</button></td>
-        </tr>
-        <tr>
-           <td><button className="game-start-btn" onClick={this.onClickStartGame}>Start</button></td>
-        </tr>
-      </table>
+      <div id="board-inner">
+
+        <div className="log col-md-3">
+          <div>Game Log</div>
+          <div className="log-msg"></div>
+        </div>
+
+        <div className="game-area col-md-9">
+          <div className="opponent-state row">Opponent: {this.state.allGameStates.opponent.currentHP}</div>
+          <div className="opponent-cards row"><Player person={this.state.allGameStates.opponent} /></div>
+          <div className="battle-field row"><button className="game-start-btn" onClick={this.onClickStartGame}>Start</button></div>
+          <div className="player-cards row"><Player person={this.state.allGameStates.player} /></div>
+          <div className="player-state row">Player: {this.state.allGameStates.player.currentHP}</div>
+          <div className="row"><button className="confirm-btn" onClick={this.onClickConfirm}>Confirm</button></div>
+        </div>
+
+      </div>
       )
   }
 });
@@ -70,13 +68,15 @@ var Card = React.createClass({
   },
 
   render:function(){
-    var card = this.props.isVisible
-      ? <p className="card" id={this.props.id} onClick={this.onClickSelect}>{this.props.name}</p>
-      : <p className="card">XXX</p>
-      ;
+
+    var card = <img className="card" src={'img/back.jpg'} height="140" width="100" />;
+
+    if (this.props.isVisible) {
+      card = <img className="card visible" id={this.props.id} data-card={this.props.name} onClick={this.onClickSelect} src={'img/' + this.props.name + '.jpg'} height="140" width="100" />;
+    }
 
     return (
-      <div>
+      <div className="col-md-2">
         {card}
       </div>
       )
@@ -115,26 +115,8 @@ var Player = React.createClass({
     });
 
     return (
-      <td>
-        {handCards}
-      </td>
-      )
-  }
-});
-
-var PlayerList = React.createClass({
-  getInitialState:function(){
-    return {
-      player: this.props.player,
-      opponent: this.props.opponent
-    }
-  },
-
-  render:function(){
-    return (
       <div>
-        <Player person={this.state.player} />
-        <Player person={this.state.opponent} />
+        {handCards}
       </div>
       )
   }

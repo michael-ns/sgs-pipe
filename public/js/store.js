@@ -21,8 +21,12 @@ var _isMyTurn = true;
  */
 function cardSelect(cardID) {
   $(".card").css("color", "black");
-  $("#" + cardID).css("color", "red").addClass("selected");
+  $("#" + cardID).addClass("selected");
   $(".confirm-btn").css("display", "block");
+}
+
+function addLogMsg(msg){
+  $('.log-msg').append("<div>" + msg + "</div>");
 }
 
 function onClickStartGame() {
@@ -30,17 +34,37 @@ function onClickStartGame() {
   //second argument for putInHand represents card visibility
   for (var i=0; i < _startingHandCount; i++) _player.putInHand(deck.draw(), true);
   for (var i=0; i < _startingHandCount; i++) _opponent.putInHand(deck.draw(), false);
+
+  addLogMsg("Game started. Let's rock!");
 }
 
 function onClickConfirm() {
   var selectedCardID = $(".selected").attr("id");
   selectedCardID = parseInt(selectedCardID);
 
-  var selectedCard = _player.playCard(selectedCardID);
+  playCard(selectedCardID);
 
-  settleCardEffect(selectedCard);
-
+  //reset select state on page
   $(".selected").removeClass("selected").css("color", "black");
+}
+
+function playCard(cardID) {
+  for (var i = 0; i < _player.cards.length; i++) {
+    if (_player.cards[i].cardID == cardID) {
+
+      var selectedCard = _player.cards[i];
+      
+      if(canPlayCard(selectedCard)) {
+        //remove the card from hand
+        _player.cards.splice(i, 1);
+        settleCardEffect(selectedCard);
+
+        //log card playing action
+        var cardName = $('.selected').data('card');
+        addLogMsg("You played card: " + cardName);
+      }        
+    }
+  }
 }
 
 function settleCardEffect(card) {
@@ -48,6 +72,31 @@ function settleCardEffect(card) {
     _opponent.currentHP -= 1;
   }
 }
+
+function canPlayCard(card) {
+  switch(card.effect) {
+    case "sha":
+      if(_player.canSha) {
+        _player.canSha = false;
+        return true;
+      } else {
+        alert("You can only use Sha once per turn.");
+        return false;
+      }
+
+    case "shan":
+      return false;
+
+    default:
+      if (_player.currentHP < _player.maxHP) {
+        _player.currentHP += 1;
+        return true;
+      } else {
+        alert("You can only use Tao when you are hurt.");
+        return false;
+      }
+    }
+  }
 
 var GameStore = assign({}, EventEmitter.prototype, {
 

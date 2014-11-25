@@ -1,3 +1,11 @@
+* {
+  text-align: center;
+}
+
+div {
+  border: 2px solid;
+}
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -13,4 +21,26 @@ table {
 
 .confirm-btn {
 	display: none;
+}
+
+.visible {
+  cursor: pointer;
+}
+
+.opponent-state .player-state {
+  height: 50px;
+}
+
+.opponent-cards .battle-field .player-cards {
+  height: 150px;
+}
+
+img {
+  margin: 50px 10px;
+}
+
+.selected {
+  border-style: solid;
+  border-width: medium;
+  border-color: red;
 }
