@@ -28673,10 +28673,16 @@ function cardSelect(cardID) {
   $(".confirm-btn").css("display", "block");
 }
 
+/**
+ * Add game actions to log
+ */
 function addLogMsg(msg){
   $('.log-msg').append("<div>" + msg + "</div>");
 }
 
+/**
+ * Start the game and all players draw cards from the deck
+ */
 function onClickStartGame() {
   $(".game-start-btn").css("display", "none");
   //second argument for putInHand represents card visibility
@@ -28686,6 +28692,9 @@ function onClickStartGame() {
   addLogMsg("Game started. Let's rock!");
 }
 
+/**
+ * Play the selected card
+ */
 function onClickConfirm() {
   var selectedCardID = $(".selected").attr("id");
   selectedCardID = parseInt(selectedCardID);
@@ -28696,6 +28705,9 @@ function onClickConfirm() {
   $(".selected").removeClass("selected").css("color", "black");
 }
 
+/**
+ * settle card play
+ */
 function playCard(cardID) {
   for (var i = 0; i < _player.cards.length; i++) {
     if (_player.cards[i].cardID == cardID) {
@@ -28715,12 +28727,61 @@ function playCard(cardID) {
   }
 }
 
+/**
+ * settle card effect
+ */
 function settleCardEffect(card) {
-  if(card.effect == "sha") {
-    _opponent.currentHP -= 1;
+  AIrespondToCard(card);
+}
+
+/**
+ * handle AI response to card play
+ */
+function AIrespondToCard(card) {
+  if (card.effect == "sha") {
+    if (opponentHasCard("shan")) {
+      opponentPlayCard("shan");
+    } else {
+      GameStore.opponentTakeDamage(1);
+      addLogMsg("Opponent took one damage");
+    }
   }
 }
 
+/**
+ * Whether the opponent has certain card
+ */
+function opponentHasCard(cardEffect) {
+  console.log(GameStore)
+  var opponentCards = _opponent.cards;
+
+  for (var i = 0; i < opponentCards.length; i++) {
+    if (opponentCards[i].effect == cardEffect) {
+      return true;    
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Opponents play card to repsonse to the player action
+ */
+function opponentPlayCard(cardEffect) {
+  var opponentCards = _opponent.cards;
+
+  for (var i = 0; i < opponentCards.length; i++) {
+    if (opponentCards[i].effect == cardEffect) {
+      opponentCards.splice(i, 1);
+      addLogMsg("Opponent played Shan to response");
+      break;
+    }
+  }
+}
+
+/**
+ * Check whether the selected card can be played
+ */
 function canPlayCard(card) {
   switch(card.effect) {
     case "sha":
@@ -28767,6 +28828,10 @@ var GameStore = assign({}, EventEmitter.prototype, {
 
   setOpponent: function(opponent) {
     _opponent = opponent;
+  },
+
+  opponentTakeDamage: function(damage) {
+    _opponent.currentHP -= damage;
   },
 
   //not specific to this game
